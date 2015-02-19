@@ -9,22 +9,37 @@ def query_google(keywords, screenshot_dir):
     print "Fetching google front page..."
     driver.get("http://google.com")
 
+    print "Taking a screenshot..."
+    waiter.shoot("frontpage")
+
     print "Typing query string..."
-    selector.get_and_clear("#gbqfq").send_keys(keywords)
+    selector.get_and_clear("input[type=text]").send_keys(keywords)
 
     print "Hitting Enter..."
-    selector.get("#gbqfb").click()
+    selector.get("button").click()
 
     print "Waiting for results to come back..."
     waiter.until_display("#ires")
 
-    print "Taking a screen shot..."
-    waiter.shoot("end")
+    print
+    print "The top search result is:"
+    print
+    print '    "{}"'.format(selector.get("#ires a").text)
+    print
 
 
-if len(argv) > 2:
-    print >>stderr, "Usage: {} [screenshot-output-dir]".format(argv[0])
-    print >>stderr, "The default screenshot output dir is /"
-    exit(11)
+def main():
+    screenshot_dir = '/shots'
 
-query_google('test', argv[1] if len(argv) == 2 else '/')
+    if len(argv) > 2:
+        print >>stderr, "Usage: {} [screenshot-output-dir]".format(argv[0])
+        print >>stderr, "The default screenshot output dir is {}".format(screenshot_dir)
+        exit(11)
+    elif len(argv) == 2:
+        screenshot_dir = argv[1]
+
+    query_google('test', screenshot_dir)
+
+
+if __name__ == '__main__':
+    main()
