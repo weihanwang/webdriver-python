@@ -74,8 +74,8 @@ def ec_element_to_be_displayed(selector):
     return ec
 
 
-def init(screenshot_dir, default_timeout=10):
+def init(default_timeout=10):
     driver = webdriver.Firefox()
-    waiter = Waiter(driver, screenshot_dir, default_timeout)
+    waiter = Waiter(driver, '/screenshots', default_timeout)
     selector = ElementCSSSelector(driver)
     return driver, waiter, selector

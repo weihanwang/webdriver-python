@@ -1,10 +1,9 @@
-from sys import argv, stderr
 from webdriver_util import init
 
 
-def query_google(keywords, screenshot_dir):
+def query_google(keywords):
     print "Loading Firefox driver..."
-    driver, waiter, selector = init(screenshot_dir)
+    driver, waiter, selector = init()
 
     print "Fetching google front page..."
     driver.get("http://google.com")
@@ -28,18 +27,5 @@ def query_google(keywords, screenshot_dir):
     print
 
 
-def main():
-    screenshot_dir = '/shots'
-
-    if len(argv) > 2:
-        print >>stderr, "Usage: {} [screenshot-output-dir]".format(argv[0])
-        print >>stderr, "The default screenshot output dir is {}".format(screenshot_dir)
-        exit(11)
-    elif len(argv) == 2:
-        screenshot_dir = argv[1]
-
-    query_google('test', screenshot_dir)
-
-
 if __name__ == '__main__':
-    main()
+    query_google('test')
