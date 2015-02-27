@@ -6,6 +6,7 @@ from traceback import format_exc
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium import webdriver
+import requests
 
 
 class ElementCSSSelector:
@@ -79,3 +80,21 @@ def init(default_timeout=10):
     waiter = Waiter(driver, '/screenshots', default_timeout)
     selector = ElementCSSSelector(driver)
     return driver, waiter, selector
+
+
+def wait_and_get(driver, url):
+    """
+    Wait until the given URL is accessible (returns 2xx or 3xx), and then call driver.get(url)
+    """
+    print "Waiting for {} readiness...".format(url)
+    while True:
+        # noinspection PyBroadException
+        try:
+            r = requests.get(url, timeout=3)
+            r.raise_for_status()
+            break
+        except Exception:
+            pass
+
+    print "Interacting with {}...".format(url)
+    driver.get(url)
