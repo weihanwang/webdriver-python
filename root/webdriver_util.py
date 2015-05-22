@@ -93,8 +93,9 @@ def wait_and_get(driver, url):
             r = requests.get(url, timeout=3)
             r.raise_for_status()
             break
-        except Exception:
-            pass
+        except Exception as e:
+            print str(e)
+            print "Continuing to wait..."
 
     print "Interacting with {}...".format(url)
     driver.get(url)
