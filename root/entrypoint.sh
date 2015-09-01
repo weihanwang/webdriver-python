@@ -6,7 +6,12 @@ set -e
 #
 # Use the RESOLUTION environmental variable to customize screen size & depth. Default is "1024x768x24".
 #
-Xvfb :1 -screen 0 ${RESOLUTION} &
+
+if [ -n "${RESOLUTION}" ]; then
+    OPTS="-screen 0 ${RESOLUTION}"
+fi
+
+Xvfb :1 ${OPTS} &
 export DISPLAY=:1
 
 # So Firefox driver can find Firefox

@@ -64,7 +64,7 @@ class Waiter:
         Save a screenshot at {screenshot_out_dir}/N-{base_file_name}.png, where N is an incrementing integer ID.
         """
         path = join(self.shot_dir, '{}-{}.png'.format(self.shot_id, base_file_name))
-        print "Saving screenshot at {}...".format(path)
+        print "Screenshot saved at {}".format(path)
         self.d.save_screenshot(path)
         self.shot_id += 1
 
