@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install pyyaml==3.11 requests==2.5.1 selenium==2.44.0
 
+ENV PYTHONPATH /
+
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 CMD [ "python", "-u", "/main.py" ]

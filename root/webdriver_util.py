@@ -2,6 +2,7 @@ from inspect import stack
 from os.path import join
 from time import time
 from sys import stderr
+import os
 from traceback import format_exc
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
@@ -33,6 +34,9 @@ class Waiter:
         self.shot_id = 0
         self.shot_dir = screenshot_dir
         self.default_timeout = default_timeout
+
+        if not os.path.isdir(self.shot_dir):
+            os.makedirs(self.shot_dir)
 
     def until(self, method, message='', timeout=-1, caller_frame=2):
         if timeout < 0:
@@ -75,9 +79,9 @@ def ec_element_to_be_displayed(selector):
     return ec
 
 
-def init(default_timeout=10):
+def init(default_timeout=10, screenshots_folder='/screenshots'):
     driver = webdriver.Firefox()
-    waiter = Waiter(driver, '/screenshots', default_timeout)
+    waiter = Waiter(driver, screenshots_folder, default_timeout)
     selector = ElementCSSSelector(driver)
     return driver, waiter, selector
 
