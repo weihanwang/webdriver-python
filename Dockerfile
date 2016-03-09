@@ -1,4 +1,4 @@
-FROM python:2.7
+FROM python:3.5
 
 MAINTAINER Weihan Wang
 
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     libdbus-glib-1-2 \
     libxcomposite1
 
-RUN pip install pyyaml==3.11 requests==2.5.1 selenium==2.44.0
+RUN pip install pyyaml==3.11 requests==2.5.1 selenium==2.52.0
 
 ENV PYTHONPATH /
 

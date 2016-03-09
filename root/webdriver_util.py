@@ -1,9 +1,7 @@
 from inspect import stack
 from os.path import join
 from time import time
-from sys import stderr
 import os
-from traceback import format_exc
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium import webdriver
@@ -52,14 +50,14 @@ class Waiter:
 
     def _wrapper(self, method, message, timeout, caller_frame, func):
         caller = stack()[caller_frame][3]
-        print "Waiting in {}(), timeout {} secs...".format(caller, timeout)
+        print("Waiting in {}(), timeout {} secs...".format(caller, timeout))
         start = time()
         try:
             func(method, message)
-            print "Spent {0:.3f} secs".format(time() - start)
+            print("Spent {0:.3f} secs".format(time() - start))
             self.shoot(caller)
-        except TimeoutException, e:
-            print >>stderr, format_exc()
+        except TimeoutException as e:
+            print('timeout-exception')
             self.shoot('timeout-exception')
             raise e
 
@@ -68,7 +66,7 @@ class Waiter:
         Save a screenshot at {screenshot_out_dir}/N-{base_file_name}.png, where N is an incrementing integer ID.
         """
         path = join(self.shot_dir, '{}-{}.png'.format(self.shot_id, base_file_name))
-        print "Screenshot saved at {}".format(path)
+        print("Screenshot saved at {}".format(path))
         self.d.save_screenshot(path)
         self.shot_id += 1
 
@@ -80,17 +78,25 @@ def ec_element_to_be_displayed(selector):
 
 
 def init(default_timeout=10, screenshots_folder='/screenshots'):
-    driver = webdriver.Firefox()
+
+    download_path = os.path.join(os.getcwd(), 'ski_data_download')
+    fp = webdriver.FirefoxProfile()
+    fp.set_preference("browser.download.folderList",2)
+    fp.set_preference("browser.download.manager.showWhenStarting",False)
+    fp.set_preference("browser.download.panel.shown", False)
+    fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv, application/vnd.ms-excel, application/octet-stream")
+    fp.set_preference("browser.download.dir", download_path)
+    driver = webdriver.Firefox(firefox_profile=fp)
     waiter = Waiter(driver, screenshots_folder, default_timeout)
     selector = ElementCSSSelector(driver)
-    return driver, waiter, selector
+    return driver, waiter, selector, download_path
 
 
 def wait_and_get(driver, url):
     """
     Wait until the given URL is accessible (returns 2xx or 3xx), and then call driver.get(url)
     """
-    print "Waiting for {} readiness...".format(url)
+    print("Waiting for {} readiness...".format(url))
     while True:
         # noinspection PyBroadException
         try:
@@ -98,8 +104,8 @@ def wait_and_get(driver, url):
             r.raise_for_status()
             break
         except Exception as e:
-            print str(e)
-            print "Continuing to wait..."
+            print(str(e))
+            print("Continuing to wait...")
 
-    print "Interacting with {}...".format(url)
+    print("Interacting with {}...".format(url))
     driver.get(url)

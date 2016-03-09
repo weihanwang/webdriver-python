@@ -1,29 +1,29 @@
-from webdriver_util import init
+from .webdriver_util import init
 
 
 def query_google(keywords):
-    print "Loading Firefox driver..."
+    print("Loading Firefox driver...")
     driver, waiter, selector = init()
 
-    print "Fetching google front page..."
+    print("Fetching google front page...")
     driver.get("http://google.com")
 
-    print "Taking a screenshot..."
+    print("Taking a screenshot...")
     waiter.shoot("frontpage")
 
-    print "Typing query string..."
+    print("Typing query string...")
     selector.get_and_clear("input[type=text]").send_keys(keywords)
 
-    print "Hitting Enter..."
+    print("Hitting Enter...")
     selector.get("button").click()
 
-    print "Waiting for results to come back..."
+    print("Waiting for results to come back...")
     waiter.until_display("#ires")
 
     print
-    print "The top search result is:"
+    print("The top search result is:")
     print
-    print '    "{}"'.format(selector.get("#ires a").text)
+    print('    "{}"'.format(selector.get("#ires a").text))
     print
 
 
