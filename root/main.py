@@ -3,7 +3,7 @@ from webdriver_util import init
 
 def query_google(keywords):
     print("Loading Firefox driver...")
-    driver, waiter, selector = init()
+    driver, waiter, selector, datapath = init()
 
     print("Fetching google front page...")
     driver.get("http://google.com")
