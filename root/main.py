@@ -1,4 +1,4 @@
-from .webdriver_util import init
+from webdriver_util import init
 
 
 def query_google(keywords):
@@ -15,7 +15,7 @@ def query_google(keywords):
     selector.get_and_clear("input[type=text]").send_keys(keywords)
 
     print("Hitting Enter...")
-    selector.get("button").click()
+    selector.get("input[type=submit]").click()
 
     print("Waiting for results to come back...")
     waiter.until_display("#ires")
